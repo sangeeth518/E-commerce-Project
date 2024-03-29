@@ -15,6 +15,8 @@ type Admin struct {
 	Password string `json:"password"`
 }
 
+// <<<<<<<<<<<<<<<<<<<<<<<<<< Admin Signup >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 func AdminSignup(c *gin.Context) {
 	var admin models.Admin
 	if err := c.ShouldBind(&admin); err != nil {
@@ -48,6 +50,8 @@ func AdminSignup(c *gin.Context) {
 		"status": "OK",
 	})
 }
+
+// <<<<<<<<<<<<<<<<<<<<<<Admin Login>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func AdminLogin(c *gin.Context) {
 	var admin Admin
