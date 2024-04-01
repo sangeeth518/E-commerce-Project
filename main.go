@@ -20,6 +20,7 @@ func init() {
 func main() {
 	port := os.Getenv("port")
 	routes.AdminRoutes(app)
+	routes.UserRoutes(app)
 	app.Run(port)
 
 }

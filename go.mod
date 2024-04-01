@@ -4,7 +4,7 @@ go 1.21.3
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/go-playground/validator/v10 v10.19.0
 	github.com/joho/godotenv v1.5.1
 	gorm.io/driver/postgres v1.5.7
 	gorm.io/gorm v1.25.8
@@ -18,7 +18,6 @@ require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.19.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
