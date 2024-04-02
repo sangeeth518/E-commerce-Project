@@ -9,6 +9,7 @@ func UserRoutes(c *gin.Engine) {
 	user := c.Group("/user")
 	{
 		user.POST("/signup", controllers.UserSignup)
+		user.POST("/login", controllers.UserLogin)
 	}
 
 }
