@@ -28,3 +28,25 @@ func Adminauth() gin.HandlerFunc {
 
 	}
 }
+
+func UserAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tokenstring, err := c.Cookie("userauthorization")
+		if err != nil {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+		if tokenstring == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "request does not contain an access token"})
+			c.Abort()
+			return
+		}
+		err = auth.Validtoken(tokenstring)
+		if err != nil {
+			c.AbortWithStatus(401)
+
+		}
+		c.Next()
+
+	}
+}
