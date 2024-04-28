@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sangeeth518/E-commerce-Project/auth"
@@ -107,4 +108,49 @@ func AdminSignout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "Admin Successfully Signed Out",
 	})
+}
+
+// Get users details for authenticated admins
+
+func GetUsers(c *gin.Context) {
+	pagestr := c.DefaultQuery("page", "1")
+	page, err := strconv.Atoi(pagestr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "page not given in right format"})
+	}
+	pagesize, err := strconv.Atoi(c.DefaultQuery("count", "3"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"user count": "not in right format"})
+	}
+	if page == 0 {
+		page = 1
+	}
+	offset := (page - 1) * pagesize
+	var userdetails models.UserDetailsAtAdmin
+	if err := i.DB.Raw("select id , email, phone_number,block_status from users order by id asc limit ? offset ?", pagesize, offset).Scan(&userdetails).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "error"})
+	}
+	c.JSON(200, gin.H{"user": userdetails})
+
+}
+
+func GetUserbyId(c *gin.Context) {
+
+}
+func BlockUser(c *gin.Context) {
+	var user models.User
+	params := c.Param("id")
+
+	i.DB.Raw("UPDATE users SET block_status=true where id=?", params).Scan(user)
+	c.JSON(http.StatusOK, gin.H{"msg": "blocked sucessfully"})
+
+}
+func UnblockUser(c *gin.Context) {
+
+	var user models.User
+	params := c.Param("id")
+
+	i.DB.Raw("UPDATE users SET block_status=false where id=?", params).Scan(user)
+	c.JSON(http.StatusOK, gin.H{"msg": "unblocked sucessfully"})
+
 }

@@ -20,3 +20,10 @@ func (a *Admin) HashPassword(password string) (string, error) {
 	a.Password = string(byte)
 	return a.Password, nil
 }
+
+type UserDetailsAtAdmin []struct {
+	ID           int `json:"id"`
+	Email        string
+	PhoneNumber  string `json:"phone"`
+	Block_status bool   `JSON:"block_status"`
+}
