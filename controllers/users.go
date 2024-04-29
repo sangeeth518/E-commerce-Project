@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -91,4 +92,11 @@ func UserLogin(c *gin.Context) {
 
 	c.JSON(http.StatusAccepted, gin.H{"Status": "true", "tokenstring": tokensting})
 
+}
+
+func AddAddress(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "chek the parameter"})
+	}
 }

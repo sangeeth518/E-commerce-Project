@@ -18,17 +18,17 @@ type User struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
-
-type Adress struct {
-	AdressId uint   `json:"adressid" gorm:"primarykey"`
-	UserId   uint   `json:"userid" gorm:"not null" `
-	Name     string `json:"name" gorm:"not null"`
-	PhoneNum int    `json:"phonenum"`
-	Pincode  int    `json:"pincode"`
-	House    string `json:"house"`
-	Area     string `json:"area"`
-	Landmark string `json:"landmark"`
-	City     string `json:"city"`
+type Address struct {
+	Id        uint   `json:"id" gorm:"unique;not null"`
+	UserID    uint   `json:"user_id"`
+	User      User   `json:"-" gorm:"foreignkey:UserID"`
+	Name      string `json:"name" validate:"required"`
+	HouseName string `json:"house_name" validate:"required"`
+	Street    string `json:"street" validate:"required"`
+	City      string `json:"city" validate:"required"`
+	State     string `json:"state" validate:"required"`
+	Phone     string `json:"phone" gorm:"phone"`
+	Pin       string `json:"pin" validate:"required"`
 }
 
 func (u *User) HashPassword(password string) (string, error) {

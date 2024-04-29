@@ -20,6 +20,6 @@ func DbConnect() {
 	}
 	DB.AutoMigrate(&models.Admin{})
 	DB.AutoMigrate(&models.User{})
-	DB.AutoMigrate(&models.Adress{})
+	DB.AutoMigrate(&models.Address{})
 
 }
