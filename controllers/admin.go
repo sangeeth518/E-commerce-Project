@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -134,23 +136,78 @@ func GetUsers(c *gin.Context) {
 
 }
 
-func GetUserbyId(c *gin.Context) {
+func GetUserbyId(id string) (models.User, error) {
+	user_id, err := strconv.Atoi(id)
+	if err != nil {
+		return models.User{}, err
+	}
+	var count int
+	if err := i.DB.Raw("select count(*) from users where id = ?", user_id).Scan(&count).Error; err != nil {
+		return models.User{}, err
+	}
+	if count < 1 {
+		return models.User{}, errors.New("user for the given id does not exist")
+	}
+	query := fmt.Sprintf("select * from users where id = '%d'", user_id)
+	var userdetails models.User
+	if err := i.DB.Raw(query).Scan(&userdetails).Error; err != nil {
+		return models.User{}, err
+	}
+	return userdetails, nil
 
 }
 func BlockUser(c *gin.Context) {
-	var user models.User
-	params := c.Param("id")
 
-	i.DB.Raw("UPDATE users SET block_status=true where id=?", params).Scan(user)
-	c.JSON(http.StatusOK, gin.H{"msg": "blocked sucessfully"})
+	params := c.Param("id")
+	user, err := GetUserbyId(params)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"user for the given id": "does not exist"})
+		return
+
+	}
+	if user.Block_status {
+		c.JSON(http.StatusBadRequest, gin.H{"already ": "blocked"})
+		return
+	} else {
+		user.Block_status = true
+	}
+	err = UpdateBlockUserByID(user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"couldnt": "block"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"user ": "blocked"})
 
 }
 func UnblockUser(c *gin.Context) {
-
-	var user models.User
 	params := c.Param("id")
+	user, err := GetUserbyId(params)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "given id does not exist"})
+		return
+	}
+	if user.Block_status {
+		user.Block_status = false
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"already ": "unblocked"})
+		return
+	}
 
-	i.DB.Raw("UPDATE users SET block_status=false where id=?", params).Scan(user)
+	err = UpdateBlockUserByID(user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"couldnt": "unblock"})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"msg": "unblocked sucessfully"})
+
+}
+
+// function which will both block and unblock a user
+func UpdateBlockUserByID(user models.User) error {
+	err := i.DB.Exec("update users set block_status = ? where id = ?", user.Block_status, user.ID).Error
+	if err != nil {
+		return err
+	}
+	return nil
 
 }
