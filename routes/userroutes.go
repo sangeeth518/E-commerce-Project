@@ -10,6 +10,7 @@ func UserRoutes(c *gin.Engine) {
 	{
 		user.POST("/signup", controllers.UserSignup)
 		user.POST("/login", controllers.UserLogin)
+		user.POST("/addadress/", controllers.AddAddress)
 	}
 
 }

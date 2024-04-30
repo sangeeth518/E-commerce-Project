@@ -99,4 +99,21 @@ func AddAddress(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": "chek the parameter"})
 	}
+
+	var address models.AddressInfo
+
+	if err := c.BindJSON(&address); err != nil {
+		c.JSON(http.StatusBadRequest, "files provided are in wrong format")
+	}
+	validationErr := validator.New().Struct(address)
+	if validationErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": validationErr})
+		return
+	}
+	if err := config.DB.Exec("insert into addresses (user_id,name,house_name,street,city,state,phone,pin) values( ?, ?, ?, ?, ?, ?, ?, ?) ", id, address.Name, address.HouseName, address.Street, address.City, address.State, address.Phone, address.Pin).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "coudn't add adress"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"adress added": "succesfully"})
+
 }

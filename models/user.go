@@ -41,3 +41,13 @@ func (u *User) HashPassword(password string) (string, error) {
 	return u.Password, nil
 
 }
+
+type AddressInfo struct {
+	Name      string `json:"name" binding:"required" validate:"required"`
+	HouseName string `json:"house_name" binding:"required" validate:"required"`
+	State     string `json:"state" binding:"required" validate:"required"`
+	Pin       string `json:"pin" binding:"required" validate:"required"`
+	Street    string `json:"street" binding:"required"`
+	City      string `json:"city" binding:"required"`
+	Phone     string `json:"phone"`
+}

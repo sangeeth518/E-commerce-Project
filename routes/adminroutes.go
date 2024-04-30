@@ -13,9 +13,9 @@ func AdminRoutes(c *gin.Engine) {
 		admin.POST("/login", controllers.AdminLogin)
 		admin.GET("/home", middleware.Adminauth(), controllers.AdminHome)
 		admin.GET("/signout", controllers.AdminSignout, middleware.Adminauth())
-		admin.GET("/block/:id", controllers.BlockUser)
-		admin.GET("/unblockblock/:id", controllers.UnblockUser)
-		admin.GET("/getusers", controllers.GetUsers)
+		admin.GET("/block/:id", middleware.Adminauth(), controllers.BlockUser)
+		admin.GET("/unblockblock/:id", middleware.Adminauth(), controllers.UnblockUser)
+		admin.GET("/getusers", middleware.Adminauth(), controllers.GetUsers)
 
 	}
 }
