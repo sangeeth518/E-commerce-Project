@@ -117,3 +117,18 @@ func AddAddress(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"adress added": "succesfully"})
 
 }
+
+func GetAdresses(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "chech id again"})
+		return
+	}
+	var adresses []models.Address
+	if err := config.DB.Raw("select * from addresses where user_id = ?", id).Scan(&adresses).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": "could not retrieve records"})
+		return
+	}
+
+	c.JSON(http.StatusOK, adresses)
+}
