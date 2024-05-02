@@ -51,3 +51,10 @@ type AddressInfo struct {
 	City      string `json:"city" binding:"required"`
 	Phone     string `json:"phone"`
 }
+
+// user details shown after logging in
+type UserDetailsResponse struct {
+	FirstName   string `json:"first_name"`
+	Email       string `json:"email"`
+	PhoneNumber string `josn:"phone_num"`
+}

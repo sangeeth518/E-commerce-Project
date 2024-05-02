@@ -13,6 +13,7 @@ func UserRoutes(c *gin.Engine) {
 		user.POST("/login", controllers.UserLogin)
 		user.POST("/addadress/", middleware.UserAuth(), controllers.AddAddress)
 		user.GET("/getaddress", middleware.UserAuth(), controllers.GetAdresses)
+		user.GET("/userdetails", middleware.UserAuth(), controllers.GetUserDetails)
 	}
 
 }

@@ -94,6 +94,8 @@ func UserLogin(c *gin.Context) {
 
 }
 
+//User add Address
+
 func AddAddress(c *gin.Context) {
 	id, err := strconv.Atoi(c.Query("id"))
 	if err != nil {
@@ -118,6 +120,7 @@ func AddAddress(c *gin.Context) {
 
 }
 
+// User get Address details
 func GetAdresses(c *gin.Context) {
 	id, err := strconv.Atoi(c.Query("id"))
 	if err != nil {
@@ -131,4 +134,39 @@ func GetAdresses(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, adresses)
+}
+
+//User profile details
+
+func GetUserDetails(c *gin.Context) {
+	idstring := c.Query("id")
+	id, err := strconv.Atoi(idstring)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "check the id again"})
+		return
+	}
+	// var count int
+	// if err := config.DB.Raw("select count(*) from users where id = ?", id).Scan(&count).Error; err != nil {
+	// 	return
+	// }
+	// if count < 1 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"err": "no user in the given id"})
+	// 	return
+	// }
+	var user models.User
+	result := config.DB.First(&user, "id = ?", id)
+	if result.Error != nil {
+		c.JSON(409, gin.H{
+			"Error": "User not exist",
+		})
+		return
+	}
+
+	var details models.UserDetailsResponse
+	if err := config.DB.Raw("select first_name,email,phone_number from users where id =?", id).Scan(&details).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "id doesnt exist"})
+		return
+	}
+	c.JSON(http.StatusOK, details)
+
 }
