@@ -58,3 +58,9 @@ type UserDetailsResponse struct {
 	Email       string `json:"email"`
 	PhoneNumber string `josn:"phone_num"`
 }
+
+type ChangePassword struct {
+	Oldpassword        string `json:"old_password"`
+	NewPassword        string `json:"newpassword"`
+	ConfirmNewPassword string `json:"confirmpassword"`
+}

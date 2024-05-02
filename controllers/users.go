@@ -170,3 +170,49 @@ func GetUserDetails(c *gin.Context) {
 	c.JSON(http.StatusOK, details)
 
 }
+
+//Change password
+
+func ChangePassword(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "feild provided in wrong format"})
+	}
+	var changepassword models.ChangePassword
+	if err := c.BindJSON(&changepassword); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "couldn't bind"})
+		return
+	}
+	password, err := GetPassword(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "couldn't get password ")
+		return
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(changepassword.Oldpassword))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "password dosen't match"})
+		return
+	}
+	if changepassword.NewPassword != changepassword.ConfirmNewPassword {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "new pass and confirm pass dosen't match"})
+		return
+	}
+	NewHashedPassword, err := bcrypt.GenerateFromPassword([]byte(changepassword.NewPassword), 10)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "couldn't hash pass"})
+		return
+	}
+	if err := config.DB.Exec("update users set password = ? where id = ?", NewHashedPassword, id).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "couldn't update adress"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"password": "updated"})
+}
+func GetPassword(id int) (string, error) {
+
+	var userpassword string
+	if err := config.DB.Raw("select password from users where id = ?", id).Scan(&userpassword).Error; err != nil {
+		return "", err
+	}
+	return userpassword, nil
+}

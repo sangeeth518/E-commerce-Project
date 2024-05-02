@@ -14,6 +14,7 @@ func UserRoutes(c *gin.Engine) {
 		user.POST("/addadress/", middleware.UserAuth(), controllers.AddAddress)
 		user.GET("/getaddress", middleware.UserAuth(), controllers.GetAdresses)
 		user.GET("/userdetails", middleware.UserAuth(), controllers.GetUserDetails)
+		user.PUT("/change-password", middleware.UserAuth(), controllers.ChangePassword)
 	}
 
 }
