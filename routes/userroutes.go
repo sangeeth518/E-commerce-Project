@@ -11,10 +11,12 @@ func UserRoutes(c *gin.Engine) {
 	{
 		user.POST("/signup", controllers.UserSignup)
 		user.POST("/login", controllers.UserLogin)
+		user.POST("/otplogin", controllers.SndOtp)
 		user.POST("/addadress/", middleware.UserAuth(), controllers.AddAddress)
 		user.GET("/getaddress", middleware.UserAuth(), controllers.GetAdresses)
 		user.GET("/userdetails", middleware.UserAuth(), controllers.GetUserDetails)
 		user.PUT("/change-password", middleware.UserAuth(), controllers.ChangePassword)
+
 	}
 
 }
