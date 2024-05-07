@@ -64,8 +64,3 @@ type ChangePassword struct {
 	NewPassword        string `json:"newpassword"`
 	ConfirmNewPassword string `json:"confirmpassword"`
 }
-
-// request for otp verification
-type OTPData struct {
-	PhoneNumber string `json:"phone,omitempty" validate:"required"`
-}

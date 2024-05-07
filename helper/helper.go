@@ -25,8 +25,10 @@ func TwilioSndOtp(phone string, serviceId string) (string, error) {
 
 	resp, err := client.VerifyV2.CreateVerification(serviceId, params)
 	if err != nil {
-		return "", err
+
+		return " ", err
 	}
+
 	return *resp.Sid, nil
 
 }
