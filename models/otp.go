@@ -4,3 +4,7 @@ package models
 type OTPData struct {
 	Number string `json:"number,omitempty"`
 }
+type VerifyData struct {
+	PhoneNumber string `json:"phone,omitempty" validate:"required"`
+	Code        string `json:"code,omitempty" validate:"required"`
+}
