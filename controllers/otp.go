@@ -58,7 +58,7 @@ func VerifyOtp(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "Otp Verified", "tokenstring": accestoken})
+	c.JSON(http.StatusOK, gin.H{"status": "Otp Verified", "tokenstring": accestoken, "user": userdetails})
 
 }
 

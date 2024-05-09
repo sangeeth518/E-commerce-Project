@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/sangeeth518/E-commerce-Project/auth"
 	"github.com/sangeeth518/E-commerce-Project/config"
+	"github.com/sangeeth518/E-commerce-Project/helper"
 	"github.com/sangeeth518/E-commerce-Project/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -215,4 +217,26 @@ func GetPassword(id int) (string, error) {
 		return "", err
 	}
 	return userpassword, nil
+}
+
+// func for forget password
+func ForgotPasswordSend(c *gin.Context) {
+	var phone models.ForgotPasswordSend
+	if err := c.BindJSON(&phone); err != nil {
+		c.JSON(http.StatusBadRequest, "Fields provided are in wrong format")
+		return
+	}
+	err := FindUserByPhone(phone.Phone)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "the user does not exist")
+		return
+	}
+	helper.TwilioSetup(os.Getenv("ACCOUNT_SID"), os.Getenv("AUTH_TOKEN"))
+	_, err = helper.TwilioSndOtp(phone.Phone, os.Getenv("SERVICE_SID"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "couldn't snd otp")
+		return
+	}
+	c.JSON(http.StatusAccepted, "otp snd succesfully")
+
 }

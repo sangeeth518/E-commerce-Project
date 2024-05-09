@@ -64,3 +64,6 @@ type ChangePassword struct {
 	NewPassword        string `json:"newpassword"`
 	ConfirmNewPassword string `json:"confirmpassword"`
 }
+type ForgotPasswordSend struct {
+	Phone string `json:"phone"`
+}
