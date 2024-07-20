@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  postgres:
+      image: postgres
+      restart: always
+      ports:
+      - "5432:5432"
+      environment: 
+        POSTGRES_USER : "postgres"
+        POSTGRES_PASSWORD : "iamsangeeth"
+        POSTGRES_DB: "ECOMMERCE"
+      # networks:
+      #   - mydb
+      volumes:
+        - ./database-postgres:/var/lib/postgresql/data
+
+
+
+  ecom:
+    image: ecom-pro 
+    restart: on-failure
+    ports:
+     - "8000:8000"   
+    environment:
+      DB_HOST: "localhost"
+      DB_NAME: "ECOMMERCE"
+      DB_USER: "postgres"
+      # DB_PORT: "5432"
+      DB_PASSWORD: "iamsangeeth"
+    depends_on:
+      - postgres
+ 
+    #    mydb:
+    #      driver: bridge      
+
