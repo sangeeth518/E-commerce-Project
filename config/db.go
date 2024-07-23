@@ -26,5 +26,6 @@ func DbConnect() {
 	DB.AutoMigrate(&models.Admin{})
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Address{})
+	DB.AutoMigrate(&models.OTP{})
 
 }

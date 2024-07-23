@@ -67,3 +67,7 @@ type ChangePassword struct {
 type ForgotPasswordSend struct {
 	Phone string `json:"phone"`
 }
+
+type OTP struct {
+	Otp string `json:"otp"`
+}
